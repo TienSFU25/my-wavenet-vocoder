@@ -46,7 +46,7 @@
   "batch_size": 8,
   "optimizer": "Adam",
   "optimizer_params": {
-    "lr": 0.001,
+    "lr": 0.002,
     "eps": 1e-08,
     "weight_decay": 0.0
   },
@@ -55,7 +55,7 @@
     "anneal_rate": 0.5,
     "anneal_interval": 200000
   },
-  "max_train_steps": 1000000,
+  "max_train_steps": 100000,
   "nepochs": 2000,
   "clip_thresh": -1,
   "max_time_sec": null,

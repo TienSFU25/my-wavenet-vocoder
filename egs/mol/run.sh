@@ -25,7 +25,8 @@ stop_stage=0
 
 # Hyper parameters (.json)
 # **CHANGE** here to your own hparams
-hparams=conf/mol_wavenet_demo.json
+# hparams=conf/mol_wavenet_demo.json
+hparams=conf/mol_wavenet.json
 
 # Batch size at inference time.
 inference_batch_size=32
