@@ -852,6 +852,7 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
 
             global_epochs.append(global_epoch)
             global_losses.append(averaged_loss)
+            save_loss_graph(f'./{global_epoch}.png')
 
         global_epoch += 1
     return ema
@@ -1039,9 +1040,11 @@ def get_data_loaders(dump_root, speaker_id, test_shuffle=True):
     return data_loaders
 
 def save_loss_graph(path):
+    print(global_epochs)
+    print(global_losses)
     plt.figure(figsize=(16, 6))
     plt.plot(global_epochs, global_losses)
-    plt.savefig(join(path, 'loss.png'), format="png")
+    plt.savefig(path, format="png")
     plt.close()
 
 if __name__ == "__main__":
@@ -1122,7 +1125,7 @@ if __name__ == "__main__":
             device, model, optimizer, global_step, checkpoint_dir, global_epoch, ema)
 
     # just dump it in the current directory
-    save_loss_graph('.')
+    save_loss_graph('final.png')
 
     print("Finished")
 
