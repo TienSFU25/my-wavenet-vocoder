@@ -62,8 +62,8 @@
   "max_time_steps": 2560,
   "exponential_moving_average": true,
   "ema_decay": 0.9999,
-  "checkpoint_interval": 50,
-  "train_eval_interval": 50,
+  "checkpoint_interval": 10,
+  "train_eval_interval": 10,
   "test_eval_epoch_interval": 1,
   "save_optimizer_state": true
 }

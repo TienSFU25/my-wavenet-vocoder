@@ -64,6 +64,11 @@ from hparams import hparams, hparams_debug_string
 global_step = 0
 global_test_step = 0
 global_epoch = 0
+
+# for graphing
+global_epochs = []
+global_losses = []
+
 use_cuda = torch.cuda.is_available()
 if use_cuda:
     cudnn.benchmark = True
@@ -798,7 +803,7 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
     else:
         ema = None
 
-    global global_step, global_epoch, global_test_step
+    global global_step, global_epoch, global_test_step, global_epochs, global_losses
     while global_epoch < hparams.nepochs:
         for phase, data_loader in data_loaders.items():
             train = (phase == "train_no_dev")
@@ -843,11 +848,13 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
             writer.add_scalar("{} loss (per epoch)".format(phase),
                               averaged_loss, global_epoch)
             print("Step {} [{}] Loss: {}".format(
-                global_step, phase, running_loss / len(data_loader)))
+                global_step, phase, averaged_loss))
+
+            global_epochs.append(global_epoch)
+            global_losses.append(averaged_loss)
 
         global_epoch += 1
     return ema
-
 
 def save_checkpoint(device, model, optimizer, step, checkpoint_dir, epoch, ema=None):
     checkpoint_path = join(
@@ -1031,6 +1038,11 @@ def get_data_loaders(dump_root, speaker_id, test_shuffle=True):
 
     return data_loaders
 
+def save_loss_graph(path):
+    plt.figure(figsize=(16, 6))
+    plt.plot(global_epochs, global_losses)
+    plt.savefig(join(path, 'loss.png'), format="png")
+    plt.close()
 
 if __name__ == "__main__":
     args = docopt(__doc__)
@@ -1108,6 +1120,9 @@ if __name__ == "__main__":
     finally:
         save_checkpoint(
             device, model, optimizer, global_step, checkpoint_dir, global_epoch, ema)
+
+    # just dump it in the current directory
+    save_loss_graph('.')
 
     print("Finished")
 

@@ -6,6 +6,7 @@ VOC_DIR=$script_dir/../../
 # Directory that contains all wav files
 # **CHANGE** this to your database path
 db_root=~/data/LJSpeech-1.1/wavs/
+# db_root=$VOC_DIR/test_dataset/
 
 spk="lj"
 dumpdir=dump
@@ -25,8 +26,8 @@ stop_stage=0
 
 # Hyper parameters (.json)
 # **CHANGE** here to your own hparams
-# hparams=conf/mol_wavenet_demo.json
-hparams=conf/mol_wavenet_banana.json
+hparams=conf/mol_wavenet_demo.json
+# hparams=conf/mol_wavenet_banana.json
 
 # Batch size at inference time.
 inference_batch_size=32
@@ -102,6 +103,9 @@ fi
 
 if [ ${stage} -le 2 ] && [ ${stop_stage} -ge 2 ]; then
     echo "stage 2: WaveNet training"
+    echo $expdir
+    echo $expname
+    echo $dump_norm_dir
     python $VOC_DIR/train.py --dump-root $dump_norm_dir --preset $hparams \
       --checkpoint-dir=$expdir \
       --log-event-path=tensorboard/${expname}
