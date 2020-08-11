@@ -839,6 +839,12 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
                 else:
                     global_test_step += 1
 
+                global_epochs.append(global_step)
+                global_losses.append(running_loss / len(data_loader))
+                # save_loss_graph(f'./{global_step}.png')
+
+                print(f'Step {global_step}, loss {running_loss / len(data_loader)}')
+
                 if global_step >= hparams.max_train_steps:
                     print("Training reached max train steps ({}). will exit".format(hparams.max_train_steps))
                     return ema
@@ -850,9 +856,9 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
             print("Step {} [{}] Loss: {}".format(
                 global_step, phase, averaged_loss))
 
-            global_epochs.append(global_epoch)
-            global_losses.append(averaged_loss)
-            save_loss_graph(f'./{global_epoch}.png')
+            # global_epochs.append(global_epoch)
+            # global_losses.append(averaged_loss)
+            # save_loss_graph(f'./{global_epoch}.png')
 
         global_epoch += 1
     return ema
