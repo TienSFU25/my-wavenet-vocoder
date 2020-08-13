@@ -843,7 +843,10 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
                 global_losses.append(running_loss / len(data_loader))
                 # save_loss_graph(f'./{global_step}.png')
 
-                print(f'Step {global_step}, loss {running_loss / len(data_loader)}')
+                print(f'Step {global_step}, number of stuff {len(data_loader)}, loss {running_loss / (global_step + 1)}')
+
+                if global_step % 100 == 0:
+                    save_loss_graph(f'./{global_step}.png')
 
                 if global_step >= hparams.max_train_steps:
                     print("Training reached max train steps ({}). will exit".format(hparams.max_train_steps))
@@ -853,6 +856,7 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
             averaged_loss = running_loss / len(data_loader)
             writer.add_scalar("{} loss (per epoch)".format(phase),
                               averaged_loss, global_epoch)
+            
             print("Step {} [{}] Loss: {}".format(
                 global_step, phase, averaged_loss))
 
@@ -1046,10 +1050,12 @@ def get_data_loaders(dump_root, speaker_id, test_shuffle=True):
     return data_loaders
 
 def save_loss_graph(path):
-    print(global_epochs)
-    print(global_losses)
+    # print(global_epochs)
+    # print(global_losses)
     plt.figure(figsize=(16, 6))
     plt.plot(global_epochs, global_losses)
+    plt.xlabel('Steps')
+    plt.ylabel('Average running loss')
     plt.savefig(path, format="png")
     plt.close()
 
