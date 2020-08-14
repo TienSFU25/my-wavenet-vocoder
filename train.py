@@ -840,7 +840,7 @@ def train_loop(device, model, data_loaders, optimizer, writer, checkpoint_dir=No
                     global_test_step += 1
 
                 global_epochs.append(global_step)
-                global_losses.append(running_loss / len(data_loader))
+                global_losses.append(running_loss / (global_step + 1))
                 # save_loss_graph(f'./{global_step}.png')
 
                 print(f'Step {global_step}, number of stuff {len(data_loader)}, loss {running_loss / (global_step + 1)}')
